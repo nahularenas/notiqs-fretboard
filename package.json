@@ -1,6 +1,6 @@
 {
   "name": "@notiqs/fretboard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A customizable React fretboard component for guitar, bass, and string instruments",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -14,7 +14,10 @@
     },
     "./styles.css": "./dist/styles.css"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch"
@@ -27,7 +30,16 @@
     "tsup": "^8.4.0",
     "typescript": "~5.9.3"
   },
-  "keywords": ["react", "fretboard", "guitar", "bass", "music", "music-theory", "visualization", "component"],
+  "keywords": [
+    "react",
+    "fretboard",
+    "guitar",
+    "bass",
+    "music",
+    "music-theory",
+    "visualization",
+    "component"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
