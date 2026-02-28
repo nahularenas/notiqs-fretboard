@@ -32,5 +32,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/nahularenas/notiqs-fretboard"
-  }
+  },
+  "homepage": "https://github.com/nahularenas/notiqs-fretboard#readme"
 }
