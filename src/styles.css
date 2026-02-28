@@ -1,0 +1,202 @@
+/* @notiqs/fretboard — Default Stylesheet */
+
+.notiqs-fretboard-root {
+  --notiqs-cell-width: 60px;
+  --notiqs-cell-height: 44px;
+  --notiqs-cell-gap: 2px;
+  --notiqs-string-label-width: 30px;
+  --notiqs-note-size: 34px;
+  --notiqs-note-radius: 10px;
+  --notiqs-note-font-size: 0.8rem;
+
+  --notiqs-cell-bg: #16162a;
+  --notiqs-cell-bg-hover: #1e1e3a;
+  --notiqs-cell-bg-open: #0d0d12;
+  --notiqs-cell-border: #2a2a4a;
+  --notiqs-cell-border-open: #3a3a5a;
+  --notiqs-wire-color: linear-gradient(to right, #2a2a4a 0%, #3a3a5a 100%);
+  --notiqs-text: #e8e8f0;
+  --notiqs-text-muted: #888;
+
+  --notiqs-color-root: #9d6eff;
+  --notiqs-color-root-dark: #7c4ddb;
+  --notiqs-color-root-glow: rgba(157, 110, 255, 0.35);
+  --notiqs-color-third: #ff6eb4;
+  --notiqs-color-third-dark: #e8459a;
+  --notiqs-color-third-glow: rgba(255, 110, 180, 0.35);
+  --notiqs-color-fifth: #20c997;
+  --notiqs-color-fifth-dark: #2ba89a;
+  --notiqs-color-fifth-glow: rgba(32, 201, 151, 0.35);
+  --notiqs-color-seventh: #d4a030;
+  --notiqs-color-seventh-dark: #b88a28;
+  --notiqs-color-seventh-glow: rgba(212, 160, 48, 0.35);
+  --notiqs-color-extension: #5b9bd5;
+  --notiqs-color-extension-dark: #4a8fd4;
+  --notiqs-color-extension-glow: rgba(91, 155, 213, 0.35);
+  --notiqs-color-other: #3a3a5a;
+  --notiqs-color-other-dark: #2a2a4a;
+  --notiqs-color-other-glow: rgba(50, 50, 74, 0.3);
+}
+
+.notiqs-fretboard-root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--notiqs-cell-gap);
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.notiqs-fretboard-stringRow {
+  display: flex;
+  align-items: center;
+  gap: var(--notiqs-cell-gap);
+}
+
+.notiqs-fretboard-stringName {
+  width: var(--notiqs-string-label-width);
+  text-align: center;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: var(--notiqs-text-muted);
+  font-size: 0.875rem;
+}
+
+.notiqs-fretboard-fretCell {
+  width: var(--notiqs-cell-width);
+  height: var(--notiqs-cell-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--notiqs-cell-bg);
+  border-right: 2px solid var(--notiqs-cell-border);
+  position: relative;
+  flex-shrink: 0;
+  transition: background-color 0.2s;
+}
+
+.notiqs-fretboard-fretCell:hover {
+  background: var(--notiqs-cell-bg-hover);
+}
+
+.notiqs-fretboard-fretCell[data-open="true"] {
+  background: var(--notiqs-cell-bg-open);
+  border-right: 4px solid var(--notiqs-cell-border-open);
+}
+
+/* String wire */
+.notiqs-fretboard-fretCell::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--notiqs-wire-color);
+  transform: translateY(-50%);
+  z-index: 0;
+  border-radius: 1px;
+}
+
+/* Note Marker — default (root color) */
+.notiqs-fretboard-noteMarker {
+  position: relative;
+  z-index: 1;
+  width: var(--notiqs-note-size);
+  height: var(--notiqs-note-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--notiqs-color-root) 0%, var(--notiqs-color-root-dark) 100%);
+  color: white;
+  border-radius: var(--notiqs-note-radius);
+  font-weight: 600;
+  font-size: var(--notiqs-note-font-size);
+  box-shadow: 0 4px 12px var(--notiqs-color-root-glow);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.25s ease, filter 0.2s ease;
+}
+
+.notiqs-fretboard-fretCell[data-has-note="true"]:hover .notiqs-fretboard-noteMarker {
+  transform: scale(1.25) translateY(-3px);
+  filter: brightness(1.2);
+  box-shadow:
+    0 8px 24px var(--note-glow-color, var(--notiqs-color-root-glow)),
+    0 4px 8px rgba(0,0,0,0.4),
+    0 0 20px var(--note-glow-color, var(--notiqs-color-root-glow));
+}
+
+.notiqs-fretboard-fretCell[data-has-note="true"]:active .notiqs-fretboard-noteMarker {
+  transform: scale(1.15) translateY(-1px);
+}
+
+/* Category Colors */
+.notiqs-fretboard-noteMarker[data-root="true"],
+.notiqs-fretboard-noteMarker[data-category="root"] {
+  background: linear-gradient(135deg, var(--notiqs-color-root) 0%, var(--notiqs-color-root-dark) 100%);
+  box-shadow: 0 4px 12px var(--notiqs-color-root-glow);
+}
+
+.notiqs-fretboard-noteMarker[data-category="third"] {
+  background: linear-gradient(135deg, var(--notiqs-color-third) 0%, var(--notiqs-color-third-dark) 100%);
+  box-shadow: 0 4px 12px var(--notiqs-color-third-glow);
+}
+
+.notiqs-fretboard-noteMarker[data-category="fifth"],
+.notiqs-fretboard-noteMarker[data-category="chord"],
+.notiqs-fretboard-noteMarker[data-category="common"] {
+  background: linear-gradient(135deg, var(--notiqs-color-fifth) 0%, var(--notiqs-color-fifth-dark) 100%);
+  box-shadow: 0 4px 12px var(--notiqs-color-fifth-glow);
+}
+
+.notiqs-fretboard-noteMarker[data-category="seventh"] {
+  background: linear-gradient(135deg, var(--notiqs-color-seventh) 0%, var(--notiqs-color-seventh-dark) 100%);
+  box-shadow: 0 4px 12px var(--notiqs-color-seventh-glow);
+}
+
+.notiqs-fretboard-noteMarker[data-category="extension"],
+.notiqs-fretboard-noteMarker[data-category="scale"],
+.notiqs-fretboard-noteMarker[data-category="scaleA"] {
+  background: linear-gradient(135deg, var(--notiqs-color-extension) 0%, var(--notiqs-color-extension-dark) 100%);
+  box-shadow: 0 4px 12px var(--notiqs-color-extension-glow);
+}
+
+.notiqs-fretboard-noteMarker[data-category="scaleB"] {
+  background: linear-gradient(135deg, var(--notiqs-color-third) 0%, var(--notiqs-color-third-dark) 100%);
+  box-shadow: 0 4px 12px var(--notiqs-color-third-glow);
+}
+
+.notiqs-fretboard-noteMarker[data-category="other"] {
+  background: linear-gradient(135deg, var(--notiqs-color-other) 0%, var(--notiqs-color-other-dark) 100%);
+  box-shadow: 0 4px 12px var(--notiqs-color-other-glow);
+}
+
+/* Fret Numbers */
+.notiqs-fretboard-fretNumbers {
+  display: flex;
+  gap: var(--notiqs-cell-gap);
+  margin-top: 0.5rem;
+}
+
+.notiqs-fretboard-fretNumbers > span:first-child {
+  width: var(--notiqs-string-label-width);
+  flex-shrink: 0;
+}
+
+.notiqs-fretboard-fretNumber {
+  width: var(--notiqs-cell-width);
+  text-align: center;
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  color: var(--notiqs-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notiqs-fretboard-root {
+    --notiqs-cell-width: 48px;
+    --notiqs-cell-height: 38px;
+    --notiqs-note-size: 28px;
+    --notiqs-note-radius: 8px;
+    --notiqs-note-font-size: 0.75rem;
+  }
+}
