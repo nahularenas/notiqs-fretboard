@@ -41,6 +41,7 @@ export interface FretboardProps {
   leftHanded?: boolean
   onNoteClick?: (info: NoteClickInfo) => void
   scrollToFret?: number
+  highlightedPosition?: { string: number; fret: number }
   classNames?: Partial<FretboardClassNames>
   styles?: Partial<FretboardStyles>
 }

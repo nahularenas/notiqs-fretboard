@@ -44,6 +44,7 @@ const positions = [
 | `showFretNumbers` | `boolean` | `true` | Show fret number row below the fretboard |
 | `onNoteClick` | `(info: NoteClickInfo) => void` | — | Callback when a note marker is clicked |
 | `scrollToFret` | `number` | — | Auto-scroll to center this fret in the viewport |
+| `highlightedPosition` | `{ string: number; fret: number }` | `undefined` | Highlights a specific note (e.g., for sequence playback) |
 | `classNames` | `Partial<FretboardClassNames>` | — | Override classes for each selector |
 | `styles` | `Partial<FretboardStyles>` | — | Override inline styles for each selector |
 

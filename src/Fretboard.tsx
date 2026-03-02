@@ -38,6 +38,7 @@ export function Fretboard({
   leftHanded = false,
   onNoteClick,
   scrollToFret,
+  highlightedPosition,
   classNames,
   styles,
 }: FretboardProps) {
@@ -102,6 +103,13 @@ export function Fretboard({
                 data-fret={fret}
                 data-open={fret === 0 || undefined}
                 data-has-note={hasNote || undefined}
+                data-highlighted={
+                  hasNote &&
+                  highlightedPosition?.string === stringIndex &&
+                  highlightedPosition?.fret === fret
+                    ? true
+                    : undefined
+                }
                 className={cx('notiqs-fretboard-fretCell', classNames?.fretCell)}
                 style={{
                   cursor: hasNote && onNoteClick ? 'pointer' : 'default',
