@@ -35,6 +35,7 @@ export function Fretboard({
   displayMode = 'notes',
   rootNote,
   showFretNumbers = true,
+  leftHanded = false,
   onNoteClick,
   scrollToFret,
   classNames,
@@ -64,6 +65,9 @@ export function Fretboard({
     return positions.find(p => p.string === stringIndex && p.fret === fret)
   }
 
+  const fretIndices = Array.from({ length: maxFrets - startFret + 1 }, (_, i) => startFret + i)
+  const orderedFrets = leftHanded ? [...fretIndices].reverse() : fretIndices
+
   return (
     <div
       ref={rootRef}
@@ -76,14 +80,15 @@ export function Fretboard({
           className={cx('notiqs-fretboard-stringRow', classNames?.stringRow)}
           style={styles?.stringRow}
         >
-          <span
-            className={cx('notiqs-fretboard-stringName', classNames?.stringName)}
-            style={styles?.stringName}
-          >
-            {stringNames[stringIndex]}
-          </span>
-          {Array.from({ length: maxFrets - startFret + 1 }, (_, i) => {
-            const fret = startFret + i
+          {!leftHanded && (
+            <span
+              className={cx('notiqs-fretboard-stringName', classNames?.stringName)}
+              style={styles?.stringName}
+            >
+              {stringNames[stringIndex]}
+            </span>
+          )}
+          {orderedFrets.map((fret) => {
             const stringMidi = tuning[stringIndex]
             const note = getNoteAtFret(stringMidi, fret)
             const position = getPositionAt(stringIndex, fret)
@@ -127,6 +132,14 @@ export function Fretboard({
               </div>
             )
           })}
+          {leftHanded && (
+            <span
+              className={cx('notiqs-fretboard-stringName', classNames?.stringName)}
+              style={styles?.stringName}
+            >
+              {stringNames[stringIndex]}
+            </span>
+          )}
         </div>
       ))}
 
@@ -135,19 +148,17 @@ export function Fretboard({
           className={cx('notiqs-fretboard-fretNumbers', classNames?.fretNumbers)}
           style={styles?.fretNumbers}
         >
-          <span></span>
-          {Array.from({ length: maxFrets - startFret + 1 }, (_, i) => {
-            const fret = startFret + i
-            return (
-              <span
-                key={fret}
-                className={cx('notiqs-fretboard-fretNumber', classNames?.fretNumber)}
-                style={styles?.fretNumber}
-              >
-                {fret}
-              </span>
-            )
-          })}
+          {!leftHanded && <span></span>}
+          {orderedFrets.map((fret) => (
+            <span
+              key={fret}
+              className={cx('notiqs-fretboard-fretNumber', classNames?.fretNumber)}
+              style={styles?.fretNumber}
+            >
+              {fret}
+            </span>
+          ))}
+          {leftHanded && <span></span>}
         </div>
       )}
     </div>

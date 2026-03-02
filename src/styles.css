@@ -44,6 +44,8 @@
   gap: var(--notiqs-cell-gap);
   overflow-x: auto;
   padding-bottom: 1rem;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .notiqs-fretboard-stringRow {

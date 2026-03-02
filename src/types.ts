@@ -38,6 +38,7 @@ export interface FretboardProps {
   displayMode?: 'notes' | 'intervals'
   rootNote?: string
   showFretNumbers?: boolean
+  leftHanded?: boolean
   onNoteClick?: (info: NoteClickInfo) => void
   scrollToFret?: number
   classNames?: Partial<FretboardClassNames>
