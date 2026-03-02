@@ -179,7 +179,8 @@
   margin-top: 0.5rem;
 }
 
-.notiqs-fretboard-fretNumbers > span:first-child {
+.notiqs-fretboard-fretNumbers > span:first-child,
+.notiqs-fretboard-fretNumbers > span:last-child:not(.notiqs-fretboard-fretNumber) {
   width: var(--notiqs-string-label-width);
   flex-shrink: 0;
 }
