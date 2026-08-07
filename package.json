@@ -1,6 +1,6 @@
 {
   "name": "@notiqs/fretboard",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "A customizable React fretboard component for guitar, bass, and string instruments",
   "type": "module",
   "main": "./dist/index.cjs",

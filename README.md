@@ -43,6 +43,7 @@ const positions = [
 | `rootNote` | `string` | — | Root note for interval calculation and root highlighting |
 | `showFretNumbers` | `boolean` | `true` | Show fret number row below the fretboard |
 | `onNoteClick` | `(info: NoteClickInfo) => void` | — | Callback when a note marker is clicked |
+| `clickableCells` | `'positions' \| 'all'` | `'positions'` | Which cells fire `onNoteClick`. Use `'all'` to make an empty fretboard clickable, e.g. for quizzes. `category` is `undefined` for empty cells. |
 | `scrollToFret` | `number` | — | Auto-scroll to center this fret in the viewport |
 | `highlightedPosition` | `{ string: number; fret: number }` | `undefined` | Highlights a specific note (e.g., for sequence playback) |
 | `classNames` | `Partial<FretboardClassNames>` | — | Override classes for each selector |

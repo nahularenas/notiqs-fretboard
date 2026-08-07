@@ -1,29 +1,29 @@
-import { useRef, useEffect } from 'react'
-import type { FretboardProps } from './types'
-import { getNoteAtFret, getIntervalLabel } from './utils'
+import { useRef, useEffect } from "react";
+import type { FretboardProps } from "./types";
+import { getNoteAtFret, getIntervalLabel } from "./utils";
 
 const GLOW_COLORS: Record<string, string> = {
-  root: 'var(--notiqs-color-root-glow)',
-  third: 'var(--notiqs-color-third-glow)',
-  fifth: 'var(--notiqs-color-fifth-glow)',
-  seventh: 'var(--notiqs-color-seventh-glow)',
-  extension: 'var(--notiqs-color-extension-glow)',
-  other: 'var(--notiqs-color-other-glow)',
-  chord: 'var(--notiqs-color-fifth-glow)',
-  common: 'var(--notiqs-color-fifth-glow)',
-  scale: 'var(--notiqs-color-extension-glow)',
-  scaleA: 'var(--notiqs-color-extension-glow)',
-  scaleB: 'var(--notiqs-color-third-glow)',
-}
+  root: "var(--notiqs-color-root-glow)",
+  third: "var(--notiqs-color-third-glow)",
+  fifth: "var(--notiqs-color-fifth-glow)",
+  seventh: "var(--notiqs-color-seventh-glow)",
+  extension: "var(--notiqs-color-extension-glow)",
+  other: "var(--notiqs-color-other-glow)",
+  chord: "var(--notiqs-color-fifth-glow)",
+  common: "var(--notiqs-color-fifth-glow)",
+  scale: "var(--notiqs-color-extension-glow)",
+  scaleA: "var(--notiqs-color-extension-glow)",
+  scaleB: "var(--notiqs-color-third-glow)",
+};
 
 function getGlowColor(category?: string, isRoot?: boolean): string {
-  if (isRoot) return GLOW_COLORS.root
-  if (category && category in GLOW_COLORS) return GLOW_COLORS[category]
-  return GLOW_COLORS.root
+  if (isRoot) return GLOW_COLORS.root;
+  if (category && category in GLOW_COLORS) return GLOW_COLORS[category];
+  return GLOW_COLORS.root;
 }
 
 function cx(staticClass: string, consumerClass?: string): string {
-  return consumerClass ? `${staticClass} ${consumerClass}` : staticClass
+  return consumerClass ? `${staticClass} ${consumerClass}` : staticClass;
 }
 
 export function Fretboard({
@@ -32,75 +32,86 @@ export function Fretboard({
   stringNames,
   maxFrets = 12,
   startFret = 0,
-  displayMode = 'notes',
+  displayMode = "notes",
   rootNote,
   showFretNumbers = true,
   leftHanded = false,
   onNoteClick,
+  clickableCells = "positions",
   scrollToFret,
   highlightedPosition,
   classNames,
   styles,
 }: FretboardProps) {
-  const rootRef = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (scrollToFret === undefined || !rootRef.current) return
-    const container = rootRef.current
+    if (scrollToFret === undefined || !rootRef.current) return;
+    const container = rootRef.current;
     const cell = container.querySelector(
-      `.notiqs-fretboard-fretCell[data-fret="${scrollToFret}"]`
-    ) as HTMLElement
+      `.notiqs-fretboard-fretCell[data-fret="${scrollToFret}"]`,
+    ) as HTMLElement;
     if (cell) {
-      const cellCenter = cell.offsetLeft + cell.offsetWidth / 2
-      const containerWidth = container.clientWidth
+      const cellCenter = cell.offsetLeft + cell.offsetWidth / 2;
+      const containerWidth = container.clientWidth;
       requestAnimationFrame(() => {
         container.scrollTo({
           left: Math.max(0, cellCenter - containerWidth / 2),
-          behavior: 'smooth',
-        })
-      })
+          behavior: "smooth",
+        });
+      });
     }
-  }, [scrollToFret])
+  }, [scrollToFret]);
 
   const getPositionAt = (stringIndex: number, fret: number) => {
-    return positions.find(p => p.string === stringIndex && p.fret === fret)
-  }
+    return positions.find((p) => p.string === stringIndex && p.fret === fret);
+  };
 
-  const fretIndices = Array.from({ length: maxFrets - startFret + 1 }, (_, i) => startFret + i)
-  const orderedFrets = leftHanded ? [...fretIndices].reverse() : fretIndices
+  const fretIndices = Array.from(
+    { length: maxFrets - startFret + 1 },
+    (_, i) => startFret + i,
+  );
+  const orderedFrets = leftHanded ? [...fretIndices].reverse() : fretIndices;
 
   return (
     <div
       ref={rootRef}
-      className={cx('notiqs-fretboard-root', classNames?.root)}
+      className={cx("notiqs-fretboard-root", classNames?.root)}
       style={styles?.root}
     >
       {tuning.map((_, stringIndex) => (
         <div
           key={stringIndex}
-          className={cx('notiqs-fretboard-stringRow', classNames?.stringRow)}
+          className={cx("notiqs-fretboard-stringRow", classNames?.stringRow)}
           style={styles?.stringRow}
         >
           {!leftHanded && (
             <span
-              className={cx('notiqs-fretboard-stringName', classNames?.stringName)}
+              className={cx(
+                "notiqs-fretboard-stringName",
+                classNames?.stringName,
+              )}
               style={styles?.stringName}
             >
               {stringNames[stringIndex]}
             </span>
           )}
           {orderedFrets.map((fret) => {
-            const stringMidi = tuning[stringIndex]
-            const note = getNoteAtFret(stringMidi, fret)
-            const position = getPositionAt(stringIndex, fret)
-            const hasNote = !!position
-            const isRoot = position?.isRoot ?? (!!rootNote && note === rootNote)
-            const midi = stringMidi + fret
+            const stringMidi = tuning[stringIndex];
+            const note = getNoteAtFret(stringMidi, fret);
+            const position = getPositionAt(stringIndex, fret);
+            const hasNote = !!position;
+            const isRoot =
+              position?.isRoot ?? (!!rootNote && note === rootNote);
+            const midi = stringMidi + fret;
+            const clickable =
+              Boolean(onNoteClick) && (clickableCells === "all" || hasNote);
 
             return (
               <div
                 key={fret}
                 data-fret={fret}
+                data-string={stringIndex}
                 data-open={fret === 0 || undefined}
                 data-has-note={hasNote || undefined}
                 data-highlighted={
@@ -110,14 +121,23 @@ export function Fretboard({
                     ? true
                     : undefined
                 }
-                className={cx('notiqs-fretboard-fretCell', classNames?.fretCell)}
+                className={cx(
+                  "notiqs-fretboard-fretCell",
+                  classNames?.fretCell,
+                )}
                 style={{
-                  cursor: hasNote && onNoteClick ? 'pointer' : 'default',
+                  cursor: clickable ? "pointer" : "default",
                   ...styles?.fretCell,
                 }}
                 onClick={() => {
-                  if (hasNote && onNoteClick) {
-                    onNoteClick({ note, midi, stringIndex, fret, category: position?.category })
+                  if (clickable && onNoteClick) {
+                    onNoteClick({
+                      note,
+                      midi,
+                      stringIndex,
+                      fret,
+                      category: position?.category,
+                    });
                   }
                 }}
               >
@@ -125,24 +145,35 @@ export function Fretboard({
                   <span
                     data-category={position?.category || undefined}
                     data-root={isRoot || undefined}
-                    className={cx('notiqs-fretboard-noteMarker', classNames?.noteMarker)}
-                    style={{
-                      '--note-glow-color': getGlowColor(position?.category, isRoot),
-                      ...styles?.noteMarker,
-                    } as React.CSSProperties}
+                    className={cx(
+                      "notiqs-fretboard-noteMarker",
+                      classNames?.noteMarker,
+                    )}
+                    style={
+                      {
+                        "--note-glow-color": getGlowColor(
+                          position?.category,
+                          isRoot,
+                        ),
+                        ...styles?.noteMarker,
+                      } as React.CSSProperties
+                    }
                   >
                     {position?.displayOverride ??
-                      (displayMode === 'intervals' && rootNote
+                      (displayMode === "intervals" && rootNote
                         ? getIntervalLabel(note, rootNote)
                         : note)}
                   </span>
                 )}
               </div>
-            )
+            );
           })}
           {leftHanded && (
             <span
-              className={cx('notiqs-fretboard-stringName', classNames?.stringName)}
+              className={cx(
+                "notiqs-fretboard-stringName",
+                classNames?.stringName,
+              )}
               style={styles?.stringName}
             >
               {stringNames[stringIndex]}
@@ -153,14 +184,20 @@ export function Fretboard({
 
       {showFretNumbers && (
         <div
-          className={cx('notiqs-fretboard-fretNumbers', classNames?.fretNumbers)}
+          className={cx(
+            "notiqs-fretboard-fretNumbers",
+            classNames?.fretNumbers,
+          )}
           style={styles?.fretNumbers}
         >
           {!leftHanded && <span></span>}
           {orderedFrets.map((fret) => (
             <span
               key={fret}
-              className={cx('notiqs-fretboard-fretNumber', classNames?.fretNumber)}
+              className={cx(
+                "notiqs-fretboard-fretNumber",
+                classNames?.fretNumber,
+              )}
               style={styles?.fretNumber}
             >
               {fret}
@@ -170,5 +207,5 @@ export function Fretboard({
         </div>
       )}
     </div>
-  )
+  );
 }
